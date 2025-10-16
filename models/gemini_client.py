@@ -9,6 +9,20 @@ class GeminiClient:
     def __init__(self):
         self.modelos_configurados = []
         self.inicializar_modelos()
+        # Sistema de prompts para respuestas concisas
+        self.system_prompt = """
+        Eres un asistente útil y directo. Sigue estas pautas estrictamente:
+        
+        - Sé conciso y ve al punto principal
+        - Limita las respuestas a 2-3 párrafos como máximo
+        - Evita introducciones largas o despedidas elaboradas
+        - Usa lenguaje claro y directo
+        - Estructura la información de manera organizada pero breve
+        - Si es necesario dividir información, usa puntos breves
+        - Responde directamente a la pregunta sin rodeos
+        
+        El usuario valora la precisión y brevedad.
+        """
     
     def inicializar_modelos(self):
         """Configura todos los modelos al inicio del programa"""
@@ -43,6 +57,9 @@ class GeminiClient:
                 "error": "No hay modelos configurados disponibles"
             }
         
+        # Combinar el system prompt con el mensaje del usuario
+        prompt_completo = f"{self.system_prompt}\n\nPregunta del usuario: {texto_usuario}"
+        
         # Intentar con cada modelo pre-configurado
         for config in self.modelos_configurados:
             try:
@@ -50,7 +67,7 @@ class GeminiClient:
                 genai.configure(api_key=config['token'])
                 
                 # Usar la instancia ya creada
-                response = await config['model'].generate_content_async(texto_usuario)
+                response = await config['model'].generate_content_async(prompt_completo)
                 logger.info(f"✅ Respuesta exitosa con: {config['model_name']}")
                 return {
                     "success": True,
