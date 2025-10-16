@@ -18,7 +18,7 @@ MODELOS = [
 # Configuración del WebSocket
 WEBSOCKET_CONFIG = {
     "host": os.getenv("WEBSOCKET_HOST", "0.0.0.0"),
-    "port": int(os.getenv("WEBSOCKET_PORT", "8765")),
+    "port": int(os.getenv("WEBSOCKET_PORT", "8080")),
     "ping_interval": 30,
     "ping_timeout": 10
 }
